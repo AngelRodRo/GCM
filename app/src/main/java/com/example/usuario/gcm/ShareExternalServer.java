@@ -58,24 +58,24 @@ public class ShareExternalServer {
 			//	}
 			//}
 			//String body = postBody.toString();
-			//byte[] bytes =  json.toString().getBytes();
+			byte[] bytes =  json.toString().getBytes("UTF-8");
 
-			byte[] bytes = body.getBytes();
+			//byte[] bytes = body.getBytes();
 			HttpURLConnection httpCon = null;
 			try {
 				httpCon = (HttpURLConnection) serverUrl.openConnection();
 				httpCon.setDoOutput(true);
-                httpCon.setDoOutput (true);
+                //httpCon.setDoOutput (true);
 				httpCon.setUseCaches(false);
 				httpCon.setFixedLengthStreamingMode(bytes.length);
 				httpCon.setRequestMethod("POST");
 				httpCon.setRequestProperty("Content-Type",
-						"application/json");
+						"application/x-www-form-urlencoded");
                 httpCon.connect();
 
                 OutputStream out = httpCon.getOutputStream();
 				out.write(bytes);
-				out.close();
+				out.close();//
 
 				int status = httpCon.getResponseCode();
 				if (status == httpCon.HTTP_OK) {
