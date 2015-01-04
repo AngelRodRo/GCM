@@ -12,11 +12,25 @@ import java.util.Map.Entry;
 
 import android.content.Context;
 import android.util.Log;
+import android.util.Xml;
+
+import org.json.JSONObject;
 
 public class ShareExternalServer {
 
 	public String shareRegIdWithAppServer(final Context context,
 			final String regId) {
+
+        JSONObject json = new JSONObject();
+
+        try {
+            json.put("user","user1");
+            json.put("type","android");
+            json.put("token",regId);
+
+        }catch (Exception e)
+        {}
+
 
 		String result = "";
 		Map<String, String> paramsMap = new HashMap<String, String>();
@@ -31,35 +45,40 @@ public class ShareExternalServer {
 				result = "Invalid URL: " + Config.APP_SERVER_URL;
 			}
 
-			StringBuilder postBody = new StringBuilder();
-			Iterator<Entry<String, String>> iterator = paramsMap.entrySet()
-					.iterator();
+			//StringBuilder postBody = new StringBuilder();
+			//Iterator<Entry<String, String>> iterator = paramsMap.entrySet()
+			//		.iterator();
 
-			while (iterator.hasNext()) {
-				Entry<String, String> param = iterator.next();
-				postBody.append(param.getKey()).append('=')
-						.append(param.getValue());
-				if (iterator.hasNext()) {
-					postBody.append('&');
-				}
-			}
-			String body = postBody.toString();
+			//while (iterator.hasNext()) {
+			//	Entry<String, String> param = iterator.next();
+			//	postBody.append(param.getKey()).append('=')
+			//			.append(param.getValue());
+			//	if (iterator.hasNext()) {
+			//		postBody.append('&');
+			//	}
+			//}
+			//String body = postBody.toString();
+			//byte[] bytes =  json.toString().getBytes();
+
 			byte[] bytes = body.getBytes();
 			HttpURLConnection httpCon = null;
 			try {
 				httpCon = (HttpURLConnection) serverUrl.openConnection();
 				httpCon.setDoOutput(true);
-				//httpCon.setUseCaches(false);
+                httpCon.setDoOutput (true);
+				httpCon.setUseCaches(false);
 				httpCon.setFixedLengthStreamingMode(bytes.length);
 				httpCon.setRequestMethod("POST");
 				httpCon.setRequestProperty("Content-Type",
 						"application/json");
-				OutputStream out = httpCon.getOutputStream();
+                httpCon.connect();
+
+                OutputStream out = httpCon.getOutputStream();
 				out.write(bytes);
 				out.close();
 
 				int status = httpCon.getResponseCode();
-				if (status == 200) {
+				if (status == httpCon.HTTP_OK) {
 					result = "RegId shared with Application Server. RegId: "
 							+ regId;
 				} else {
