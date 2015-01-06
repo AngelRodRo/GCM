@@ -3,7 +3,7 @@ package com.example.usuario.gcm;
 public interface Config {
 
 	// used to share GCM regId with application server - using php app server
-	static final String APP_SERVER_URL = "http://myapp-taxiapp.rhcloud.com/subscribe:9000";
+	static final String APP_SERVER_URL = "https://aqueous-escarpment-1930.herokuapp.com/send";
 
 	// GCM server using java
 	// static final String APP_SERVER_URL =

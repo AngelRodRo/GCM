@@ -1,6 +1,12 @@
 package com.example.usuario.gcm;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
@@ -18,10 +24,13 @@ import android.widget.Toast;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
+import org.json.JSONObject;
+
 public class RegisterActivity extends Activity {
 
 	Button btnGCMRegister;
 	Button btnAppShare;
+    Button btnmensaje;
 	GoogleCloudMessaging gcm;
 	Context context;
 	String regId;
@@ -72,6 +81,120 @@ public class RegisterActivity extends Activity {
 				}
 			}
 		});
+
+        /*btnmensaje = (Button) findViewById(R.id.btnMensaje);
+
+
+        //Enviar un mensaje nuevo al servidor
+        btnmensaje.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                List<String> values = new ArrayList<String>();
+                values.add("user1");
+
+
+                String URL = "https://aqueous-escarpment-1930.herokuapp.com/send";
+
+                //JSON PRINCIPAL (MENSAJE)
+                JSONObject princjs = new JSONObject();
+
+
+                //Partes del JSON
+                JSONObject androidjs = new JSONObject();
+                JSONObject datajs = new JSONObject();
+                JSONObject iosjs = new JSONObject();
+
+                try {
+                    datajs.put("messaje", "Este es mi mensaje :D");
+
+                    androidjs.put("collapseKey", "optional");
+                    androidjs.put("data", datajs);
+
+                    iosjs.put("badge", 0);
+                    iosjs.put("alert", "Your message here");
+                    iosjs.put("sound", "soundName");
+
+
+                    princjs.put("users", values);
+                    princjs.put("android", androidjs);
+                    princjs.put("ios", iosjs);
+                }
+                catch (Exception e){
+                    Toast.makeText(getApplicationContext(),"Error en el mensaje JSON", Toast.LENGTH_LONG).show();
+                }
+
+                //String result = "";
+                //Map<String, String> paramsMap = new HashMap<String, String>();
+                //paramsMap.put("regId", regId);
+
+                java.net.URL serverUrl = null;
+                try {
+                    serverUrl = new URL(URL);
+                } catch (MalformedURLException e) {
+                    Log.e("AppUtil", "URL Connection Error: "
+                            + URL, e);
+                    //result = "Invalid URL: " + URL;
+                }
+
+                //StringBuilder postBody = new StringBuilder();
+                //Iterator<Entry<String, String>> iterator = paramsMap.entrySet()
+                //		.iterator();
+
+                //while (iterator.hasNext()) {
+                //	Entry<String, String> param = iterator.next();
+                //	postBody.append(param.getKey()).append('=')
+                //			.append(param.getValue());
+                //	if (iterator.hasNext()) {
+                //		postBody.append('&');
+                //	}
+                //}
+                //String body = postBody.toString();
+                byte[] bytes = princjs.toString().getBytes();
+                //byte[] bytes =  json.toString().getBytes("UTF-8");
+
+                //byte[] bytes = body.getBytes();
+                HttpURLConnection httpCon = null;
+                try {
+                    httpCon = (HttpURLConnection) serverUrl.openConnection();
+                    httpCon.setDoOutput(true);
+                    httpCon.setUseCaches(false);
+                    httpCon.setFixedLengthStreamingMode(bytes.length);
+                    httpCon.setRequestMethod("POST");
+                    httpCon.setRequestProperty("Content-Type", "application/json");
+                    httpCon.connect();
+
+                    OutputStream out = httpCon.getOutputStream();
+                    out.write(bytes);
+                    out.close();
+
+                    int status = httpCon.getResponseCode();
+                    if (status == httpCon.HTTP_OK) {
+                        Toast.makeText(getApplicationContext(), "Se envio los datos correctamente", Toast.LENGTH_LONG).show();
+                        //result = "RegId shared with Application Server. RegId: "
+                        //       + regId;
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Post Failure." + " Status: " + status, Toast.LENGTH_LONG).show();
+
+                        //result = "Post Failure." + " Status: " + status;
+                    }
+                }catch (IOException ex)
+                {
+                    Toast.makeText(getApplicationContext(), " POST FAILURE ", Toast.LENGTH_LONG).show();
+
+                } finally {
+                    if (httpCon != null) {
+                        httpCon.disconnect();
+                    }
+                }
+
+
+
+                //return result;
+
+            }
+
+        });*/
 	}
 
 	public String registerGCM() {
@@ -165,4 +288,6 @@ public class RegisterActivity extends Activity {
 		editor.putInt(APP_VERSION, appVersion);
 		editor.commit();
 	}
+
+
 }
